@@ -1,0 +1,12 @@
+---
+
+- include: install.yml
+  tags: [repmgr, repmgr-install]
+
+- include: configure.yml
+  tags: [repmgr, repmgr-configure]
+
+- include: bootstrap.yml
+  when: repmgr_bootstrap|bool
+  tags: [repmgr, repmgr-bootstrap]
+

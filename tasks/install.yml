@@ -1,0 +1,19 @@
+---
+
+- name: install required packages
+  apt:
+    pkg: "{{ item }}"
+    state: latest
+  with_items: "{{ repmgr_packages }}"
+
+- name: short command wrapper
+  copy:
+    content: |
+      #!/bin/sh
+      PATH="/bin:/sbin:/usr/bin:/usr/sbin"
+      repmgr -f {{ repmgr_conf }} $*
+    dest: /usr/local/bin/repmgrctl
+    owner: root
+    group: root
+    mode: 0755
+

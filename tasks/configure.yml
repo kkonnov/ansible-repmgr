@@ -1,0 +1,42 @@
+---
+
+- name: add password to .pgpass file
+  lineinfile:
+    dest: "{{ item }}"
+    line: "*:*:*:{{ repmgr_db_user }}:{{ repmgr_db_password | mandatory }}"
+    create: yes
+    owner: "{{ repmgr_user }}"
+    group: "{{ repmgr_group }}"
+    mode: 0600
+  with_items:
+    - ~{{ repmgr_user }}/.pgpass
+    - ~root/.pgpass
+
+- name: repmgr configuration directory
+  file:
+    path: "{{ repmgr_conf | dirname }}"
+    owner: root
+    group: root
+    mode: "0755"
+    state: directory
+
+- name: repmgr main configuration file
+  template:
+    src: repmgr.conf.j2
+    dest: "{{ repmgr_conf }}"
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - restart repmgrd
+
+- name: repmgrd debian default file
+  template:
+    src: default.j2
+    dest: /etc/default/repmgrd
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - restart repmgrd
+
