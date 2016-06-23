@@ -1,15 +1,16 @@
 ---
  - name: Removing old records in the repl_monitor table
-   cron:
-     name: "Removing repl_monitor records older than 4 days"
-     minute: "{{ item.repmgr_cron_minute }}"
-     hour: "{{ item.repmgr_cron_hour }}"
-     day: "{{ item.repmgr_cron_day }}"
-     month: "{{ item.repmgr_cron_month }}"
-     weekday: "{{ item.repmgr_cron_weekday }}"
-     job: "{{ item.repmgr_cron_job }}"
-     state: present
 
-     with_items: "{{ repmgr_cron }}"
+    user: "{{ item.user }}"
+    name: "Removing repl_monitor records older than 4 days"
+    cron_file: repmgr_clean
+    job: "psql -U postgres repmgr -c \"DELETE * FROM repmgr_test.repl_monitor WHERE last_monitor_time < current_timestamp - interval '4d'\""
+    state: present
+    disabled: "{{ item.disabled }}"
+    minute: "{{ item.minute }}"
+    hour: "{{ item.hour }}"
+    day: "{{ item.day }}"
+    month: "{{ item.month }}"
+    weekday: "{{ item.weekday }}"
 
-
+with_items: "{{ repmgr_cron }}"
