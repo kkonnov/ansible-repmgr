@@ -11,5 +11,6 @@
   tags: [repmgr, repmgr-bootstrap]
 
 - include: cron_jobs.yml
-  tags: [repmgr]
+  when: repmgr_cron_status|bool
+  tags: [repmgr, repmgr-cron]
 
