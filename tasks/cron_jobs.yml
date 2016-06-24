@@ -1,7 +1,7 @@
 ---
 - name: Removing old records in the repl_monitor table
   cron:
-     name: "{{ item.name }}"
+     name: "{{ item.name |default('Removing repl_monitor old records') }}"
      cron_file: repmgr_clean
      job: "{{ item.job }}"
      state: present
