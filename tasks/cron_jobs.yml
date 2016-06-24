@@ -1,7 +1,7 @@
 ---
 - name: Removing old records in the repl_monitor table
   cron:
-     name: "Removing repl_monitor records older than 4 days"
+     name: "Removing repl_monitor old records"
      cron_file: repmgr_clean
      job: "{{ item.job }}"
      state: present
